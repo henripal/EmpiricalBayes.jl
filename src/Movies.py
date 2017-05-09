@@ -4,7 +4,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 BASE_URL = 'http://www.metacritic.com/'
-SLEEP_TIME = 10
+SLEEP_TIME = 1
 
 class Movie:
     def __init__(self, url_id):
@@ -37,7 +37,7 @@ class Movie:
 
     def make_soup_from_url(self, url, attempt=0):
         attempt = attempt + 1
-        time.sleep(int(random.random()*SLEEP_TIME))
+        time.sleep(SLEEP_TIME + attempt*int(random.random()))
         if attempt > 10:
             return None
         try:
@@ -56,16 +56,19 @@ class Movie:
 
     def get_people_from_category(self, category):
         people = []
-        for role in category.parent.parent.parent.find_all('td', {'class': 'role'}):
-            name = role.previous_sibling.previous_sibling.text.strip()
-            role = role.text.strip()
-            if ('Producer' in role) and (role != 'Producer'):
-                pass
+        try:
+            for role in category.parent.parent.parent.find_all('td', {'class': 'role'}):
+                name = role.previous_sibling.previous_sibling.text.strip()
+                role = role.text.strip()
+                if ('Producer' in role) and (role != 'Producer'):
+                    pass
+                else:
+                    people.append(name)
+            if len(people) == 1:
+                return people[0]
             else:
-                people.append(name)
-        if len(people) == 1:
-            return people[0]
-        else:
+                return people
+        except:
             return people
 
     def update_people(self):
@@ -98,12 +101,15 @@ class Movie:
                 pass
 
     def update_users(self):
-        sentiments = ('Positive:', 'Mixed:', 'Negative:')
-        result = [] 
-        for sentiment in sentiments:
-            result.append(self.users_soup.find(text=sentiment).parent.parent.find('div', {'class': 'count'}).text)
+        try:
+            sentiments = ('Positive:', 'Mixed:', 'Negative:')
+            result = [] 
+            for sentiment in sentiments:
+                result.append(self.users_soup.find(text=sentiment).parent.parent.find('div', {'class': 'count'}).text)
 
-        self.user_reviews = tuple(result)
+            self.user_reviews = tuple(result)
+        except:
+            self.user_reviews = (0, 0, 0)
             
 
 def clean_span_array(array):
