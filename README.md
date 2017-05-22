@@ -1,7 +1,7 @@
 # EmpiricalBayes.jl
 
 Basic julia package for conducting Empirical Bayes analysis on DataFrames or raw data.
-Usage is extensively shown in my analysis of metacritic critic data [MetacriticBayes](github.com/henripal/MetacriticBayes).
+Usage is extensively shown in my analysis of metacritic critic data [MetacriticBayes](https://github.com/henripal/MetacriticBayes).
 
 For now this supports:
 - Dirichlet / Categorical
