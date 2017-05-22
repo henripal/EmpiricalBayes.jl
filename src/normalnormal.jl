@@ -10,6 +10,7 @@ type NormalNormal{S} <: BayesModel
     posteriors::Dict{S, Distributions.Normal{Float64}}
 end
 
+Base.show(io::IO, nn::NormalNormal) = print(io, typeof(nn))
 """
 Returns a fitted NormalNormal.
 values is a dictionary indexed by ids, whose values are arrays
